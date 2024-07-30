@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Send SMS with Twilio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Send SMS with Twilio</h1>
+  <form id="smsForm">
+    <label for="to">To:</label>
+    <input type="text" id="to" name="to" required><br><br>
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" required></textarea><br><br>
+    <button type="submit">Send SMS</button>
+  </form>
+  <p id="response"></p>
+
+  <script>
+    document.getElementById('smsForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const to = document.getElementById('to').value;
+      const message = document.getElementById('message').value;
+
+      fetch('http://localhost:3000/send-sms', { // Use the backend server URL
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ to, message })
+      })
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('response').innerText = data;
+      })
+      .catch(error => {
+        document.getElementById('response').innerText = `Error: ${error.message}`;
+      });
+    });
+  </script>
+</body>
+</html>
